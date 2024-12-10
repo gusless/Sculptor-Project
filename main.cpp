@@ -25,12 +25,6 @@ int main(){
 
     const char* file_local = "C:\\Users\\Gusto\\Desktop\\Sculptor\\Sculptor\\build\\Desktop_Qt_6_8_1_MinGW_64_bit-Debug\\offFile.off";
 
-    //v.setColor(85, 91, 115, 1);
-    //v.setColor(113, 119, 130, 1);
-    //v.setColor(64, 68, 84, 1)
-    //v.setColor(85, 89, 97,1);
-    //v.setColor(90, 94, 102, 1);
-
     //cano
     v.setColor(101, 106, 115, 1);
     for(int i=75; i<148; i++){
