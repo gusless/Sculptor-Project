@@ -27,7 +27,7 @@ std::string find_path(const std::string &directory, const std::string &filename)
     return "";
 }
 
-//funcao para abrir o arquvi no windows
+//funcao para abrir o arquivo no windows
 void win_open_file(const char* filename){
     std::string file(filename);
     std::string file_local = find_path("../../",file);
