@@ -228,10 +228,10 @@ void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
     }
 }
 
-
 void Sculptor::writeOFF(const char* filename){
     std::ofstream file;
-    file.open(filename);
+    std::string path = "../../" + std::string(filename); //Isso eh para colocar o arquivo duas paginas antes, saindo da pasta build
+    file.open(path);
 
     if(!file.is_open()){
         std::cerr << "Erro ao abrir o arquivo" << std::endl;

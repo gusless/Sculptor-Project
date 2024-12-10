@@ -3,27 +3,54 @@
 #include <iostream>
 #include <string.h>
 #include <cstdlib>
+#include <filesystem>
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
+namespace fs = std::filesystem;
 const int LEN = 150;
 
-void win_open_file(const char* file_local){
-    if(!std::ifstream(file_local)){
+//funcao usada para achar o caminho do arquivo a ser aberto
+std::string find_path(const std::string &directory, const std::string &filename){
+    try{
+        for(const auto &entry : fs::recursive_directory_iterator(directory)){
+            //std::cout << entry.path().string() << std::endl;
+            if(entry.is_regular_file() && entry.path().filename() == filename){
+                return fs::absolute(entry.path()).string();
+            }
+        }
+    } catch(const std::filesystem::filesystem_error &e){
+    std::cerr << "Erro ao acessar a pasta" << e.what() << std::endl;
+    }
+    return "";
+}
+
+//funcao para abrir o arquvi no windows
+void win_open_file(const char* filename){
+    std::string file(filename);
+    std::string file_local = find_path("../../",file);
+
+    char file_path[200];
+    file_local.copy(file_path,file_local.size());
+    file_path[file_local.size()] = '\0';
+
+    //std::cout << filename << std::endl;
+    //std::cout << file_path << std::endl;
+
+    if(!std::ifstream(file_path)){
         std::cerr << "Arquivo nao encontrado" << std::endl;
         return;
     }
 #ifdef _WIN32
-    ShellExecute(0, "open", file_local, NULL, NULL, SW_SHOWNORMAL);
-}
+    ShellExecute(0, "open", file_path, NULL, NULL, SW_SHOWNORMAL);
 #endif
+}
 
 int main(){
     Sculptor v(LEN,LEN,LEN);
-
-    const char* file_local = "C:\\Users\\Gusto\\Desktop\\Sculptor\\Sculptor\\build\\Desktop_Qt_6_8_1_MinGW_64_bit-Debug\\offFile.off";
+    char filename[] = "offFile.off";
 
     //cano
     v.setColor(101, 106, 115, 1);
@@ -159,9 +186,9 @@ int main(){
     v.putVoxel(57,42,52);
     v.putVoxel(55,45,52);
 
-    v.writeOFF("offFile.off");
+    v.writeOFF(filename);
 
-    win_open_file(file_local);
+    win_open_file(filename);
 
     return 0;
 }
